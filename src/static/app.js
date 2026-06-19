@@ -37,13 +37,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const participantsListEl = document.createElement('ul');
         participantsListEl.className = 'participants-list';
+        participantsListEl.style.listStyle = 'none';
+        participantsListEl.style.paddingLeft = '0';
+        participantsListEl.style.marginLeft = '0';
 
         const participants = details.participants || [];
         if (participants.length > 0) {
           participants.forEach(p => {
             const li = document.createElement('li');
             const text = typeof p === 'string' ? p : (p.email || p.name || JSON.stringify(p));
-            li.textContent = text;
+
+            const participantText = document.createElement('span');
+            participantText.textContent = text;
+            li.appendChild(participantText);
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-participant-btn';
+            removeButton.textContent = '×';
+            removeButton.title = `Remove ${text}`;
+            removeButton.setAttribute('aria-label', `Remove ${text}`);
+            removeButton.style.marginLeft = '12px';
+            removeButton.style.display = 'inline-block';
+            removeButton.addEventListener('click', () => {
+              unregisterParticipant(name, text);
+            });
+
+            li.appendChild(removeButton);
             participantsListEl.appendChild(li);
           });
         } else {
@@ -69,6 +89,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function unregisterParticipant(activityName, email) {
+    try {
+      const response = await fetch(
+        `/activities/${encodeURIComponent(activityName)}/participants?email=${encodeURIComponent(email)}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        messageDiv.textContent = result.message;
+        messageDiv.className = "success";
+        messageDiv.classList.remove("hidden");
+        fetchActivities();
+      } else {
+        messageDiv.textContent = result.detail || "Unable to remove participant";
+        messageDiv.className = "error";
+        messageDiv.classList.remove("hidden");
+      }
+
+      setTimeout(() => {
+        messageDiv.classList.add("hidden");
+      }, 5000);
+    } catch (error) {
+      messageDiv.textContent = "Failed to remove participant. Please try again.";
+      messageDiv.className = "error";
+      messageDiv.classList.remove("hidden");
+      console.error("Error removing participant:", error);
+    }
+  }
+
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -90,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";

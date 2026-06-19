@@ -75,14 +75,21 @@ section h3 {
 }
 
 /* Participants list styling */
-.participants-list {
-  list-style: disc;
-  margin-left: 20px;
+.participants-list,
+.activity-card ul.participants-list {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-position: outside;
+  margin-left: 0;
   margin-top: 8px;
   padding-left: 0;
 }
 
 .participants-list li {
+  list-style: none !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #ffffff;
   padding: 8px 10px;
   border-radius: 6px;
@@ -99,6 +106,27 @@ section h3 {
   border: none;
   padding: 0;
   margin-bottom: 0;
+  display: block;
+}
+
+.remove-participant-btn {
+  background: rgba(227, 242, 253, 0.8);
+  border: 1px solid rgba(30, 136, 229, 0.4);
+  color: rgba(30, 136, 229, 0.9);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  min-width: 34px;
+  text-align: center;
+  font-weight: bold;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.remove-participant-btn:hover {
+  background-color: #ffebee;
+  transform: translateY(-1px);
 }
 
 .form-group {
@@ -133,6 +161,26 @@ button {
 
 button:hover {
   background-color: #3949ab;
+}
+
+button.remove-participant-btn {
+  background: #ffe9ea;
+  border: 1px solid #f2b8b5;
+  color: #c62828;
+  font-size: 14px;
+  line-height: 1.2;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  min-width: 72px;
+  text-align: center;
+  font-weight: 700;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+button.remove-participant-btn:hover {
+  background-color: #ffdde0;
+  transform: translateY(-1px);
 }
 
 .message {
