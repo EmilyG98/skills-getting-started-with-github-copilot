@@ -13,9 +13,15 @@
         "src.app:app",
         "--reload",
         "--reload-include",
-        "src/static/*"
+        "src/static/*",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
       ],
-      "jinja": true
+      "jinja": true,
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
     }
   ]
 }
